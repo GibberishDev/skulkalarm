@@ -1,0 +1,7 @@
+name: Sculk Alram
+version: '${project.version}'
+main: com.gibbdev.sculkalram
+api-version: 1.19
+authors: [ GibbDev ]
+description: Small Plugin that allows players to see thier current sculk warning level
+website: https://github.com/GibberishDev/skulkalarm
