@@ -1,6 +1,8 @@
 package com.gibbdev;
 
-import com.gibbdev.server.commands.TestSidebarSetup;
+import com.gibbdev.server.display.RecoveryCompassAction;
+import com.gibbdev.server.commands.SculkAlarmAppearance;
+import com.gibbdev.server.commands.SculkAlarmToggle;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -13,7 +15,10 @@ public final class SculkAlram extends JavaPlugin {
 
         this.getLogger().log(Level.INFO, "Sculk alarm loaded. Thank you and enjoy");
 
-        getCommand("test_sidebar").setExecutor(new TestSidebarSetup());
+        getServer().getPluginManager().registerEvents(new RecoveryCompassAction(), this);
+
+        getCommand("sa_appearance").setExecutor(new SculkAlarmAppearance());
+        getCommand("sa_toggle").setExecutor(new SculkAlarmToggle());
     }
 
     @Override
@@ -24,3 +29,4 @@ public final class SculkAlram extends JavaPlugin {
         return plugin;
     }
 }
+//TODO: Add config support for enabling and disabling RP and custom messages and characters

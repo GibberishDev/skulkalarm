@@ -6,6 +6,7 @@ authors: [ GibbDev ]
 description: Small Plugin that allows players to see thier current sculk warning level
 website: https://github.com/GibberishDev/skulkalarm
 commands:
-  test_sidebar:
-    description: debug command
-    aliases: [sidebar, setupsidebar]
+  sa_appearance:
+    description: Allows to toggle sculk alarm appearance
+  sa_toggle:
+    description: Allows to toggle if alram gui appears on interact with recovery compass
