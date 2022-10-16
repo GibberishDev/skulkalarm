@@ -22,7 +22,7 @@ public class ChatGenerator {
                 Component.text("and it will decrease in ", Style.style(TextColor.color(120, 255 , 120)))).append(
                 Component.text(alarmSecondsLeft + " ", Style.style(TextColor.color(255, 170 , 0)))).append(
                 Component.text("seconds. ", Style.style(TextColor.color(120, 255 , 120)))).append(
-                Component.text("Well... you are in the clear. For now...", Style.style(TextColor.color(220, 200 , 0), TextDecoration.ITALIC)));
+                Component.text("Well... you are safe. For now...", Style.style(TextColor.color(220, 200 , 0), TextDecoration.ITALIC)));
                     break;
             case 2: txtComp = txtComp.append(
                 Component.text(alarmLevel + " ", Style.style(TextColor.color(255, 120, 0), TextDecoration.BOLD))).append(
@@ -49,4 +49,3 @@ public class ChatGenerator {
         p.sendMessage(txtComp);
     }
 }
-//TODO: add custom characters support
