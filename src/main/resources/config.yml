@@ -1,0 +1,38 @@
+texts:
+  sidebar-level-label:
+    enabled: 1 #toggles if alarm level label is shown (number is on any way)
+  sidebar-seconds-label:
+    enabled: 1 #toggles if seconds until level decrease label is shown (number is on any way)
+  sidebar-comment-label:
+    enabled: 1 #toggles developer comments on player's warning level
+  sidebar-warden-image:
+    enabled: 1 #toggles custom characters at the end of sidebar (disable if used without resource pack)
+  chat-comment-label:
+    enabled: 1 #toggles developer comments on player's warning level in chat
+colors: #unfortunatelly only for chat appearance option as scoreboard still uses archaic team color system(That with § symbol)
+  text:
+    r: 120
+    g: 255
+    b: 120
+  warning-level-0:
+    r: 60
+    g: 255
+    b: 60
+  warning-level-1:
+    r: 220
+    g: 200
+    b: 0
+  warning-level-2:
+    r: 250
+    g: 120
+    b: 0
+  warning-level-3:
+    r: 255
+    g: 40
+    b: 0
+  warning-level-4:
+    r: 10
+    g: 70
+    b: 80
+
+
