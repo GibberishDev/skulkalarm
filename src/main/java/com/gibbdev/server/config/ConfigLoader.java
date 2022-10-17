@@ -10,6 +10,7 @@ public class ConfigLoader{
     static Plugin  plugin = SculkAlram.getPlugin();
 
     public static Color textColor = Color.fromRGB(120, 255, 120);
+    public static Color sidebarLabelColor = Color.fromRGB(250, 120, 0);
     public static Color lvl0Color = Color.fromRGB(60, 255, 60);
     public static Color lvl1Color = Color.fromRGB(220, 200, 0);
     public static Color lvl2Color = Color.fromRGB(250, 120, 0);
@@ -25,6 +26,7 @@ public class ConfigLoader{
     public static void loadConfig() {
         Configuration config = plugin.getConfig();
         textColor = Color.fromRGB((Integer) config.get("colors.text.r"),(Integer) config.get("colors.text.g") ,(Integer) config.get("colors.text.b"));
+        sidebarLabelColor = Color.fromRGB((Integer) config.get("colors.sidebar-label.r"),(Integer) config.get("colors.sidebar-label.g") ,(Integer) config.get("colors.sidebar-label.b"));
         lvl0Color = Color.fromRGB((Integer) config.get("colors.warning-level-0.r"),(Integer) config.get("colors.warning-level-0.g") ,(Integer) config.get("colors.warning-level-0.b"));
         lvl1Color = Color.fromRGB((Integer) config.get("colors.warning-level-1.r"),(Integer) config.get("colors.warning-level-1.g") ,(Integer) config.get("colors.warning-level-1.b"));
         lvl2Color = Color.fromRGB((Integer) config.get("colors.warning-level-2.r"),(Integer) config.get("colors.warning-level-2.g") ,(Integer) config.get("colors.warning-level-2.b"));

@@ -4,6 +4,7 @@ import com.gibbdev.SculkAlram;
 import com.gibbdev.server.config.ConfigLoader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +38,7 @@ public class SidebarGenerator implements Listener {
     private static void updateAlarmSidebar(@NotNull Player p) {
         playerBoard = mngr.getNewScoreboard();
         playerObjective.unregister();
-        playerObjective = playerBoard.registerNewObjective("alarmSidebar", "dummy", Component.text("Sculk Alarm", Style.style(TextDecoration.BOLD, ConfigLoader.getColor(4))));
+        playerObjective = playerBoard.registerNewObjective("alarmSidebar", "dummy", Component.text("Sculk Alarm", Style.style(TextDecoration.BOLD, TextColor.color(ConfigLoader.sidebarLabelColor.asRGB()))));
         Integer warningLevel = PlayerDataScraper.getAlarmLevel(p);
         Integer secsTillLevelDrop = PlayerDataScraper.getAlarmSecs(p);
         playerObjective.setDisplaySlot(DisplaySlot.SIDEBAR);

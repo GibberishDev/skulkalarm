@@ -34,5 +34,11 @@ colors: #unfortunatelly only for chat appearance option as scoreboard still uses
     r: 10
     g: 70
     b: 80
+  sidebar-label:
+    r: 250
+    g: 120
+    b: 0
+#but I guess this one works. Label of the sidebar accepts raw json fomat but names of fake players?
+#Hell nah. Here at Mojank we don't do things like that
 
 
