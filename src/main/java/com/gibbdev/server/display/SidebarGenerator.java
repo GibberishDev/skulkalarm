@@ -1,6 +1,6 @@
 package com.gibbdev.server.display;
 
-import com.gibbdev.SculkAlram;
+import com.gibbdev.SculkAlarm;
 import com.gibbdev.server.config.ConfigLoader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -93,11 +93,11 @@ public class SidebarGenerator implements Listener {
                     this.cancel();
                 }
             }
-        }.runTaskTimer(SculkAlram.getPlugin(),0L, 20L);
+        }.runTaskTimer(SculkAlarm.getPlugin(),0L, 20L);
     }
 
     public static void clearSidebar(@NotNull Player p) {
-        if (prevScoreboard.equals(null)) {
+        if (prevScoreboard == null) {
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         } else {p.setScoreboard(prevScoreboard);}
         scoreboardEnabled = false;

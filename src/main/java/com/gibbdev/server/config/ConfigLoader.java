@@ -1,13 +1,13 @@
 package com.gibbdev.server.config;
 
-import com.gibbdev.SculkAlram;
+import com.gibbdev.SculkAlarm;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigLoader{
-    static Plugin  plugin = SculkAlram.getPlugin();
+    static Plugin  plugin = SculkAlarm.getPlugin();
 
     public static Color textColor = Color.fromRGB(120, 255, 120);
     public static Color sidebarLabelColor = Color.fromRGB(250, 120, 0);

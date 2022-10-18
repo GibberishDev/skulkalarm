@@ -1,6 +1,6 @@
 package com.gibbdev.server.commands;
 
-import com.gibbdev.SculkAlram;
+import com.gibbdev.SculkAlarm;
 import com.gibbdev.server.display.SidebarGenerator;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -16,6 +16,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class SculkAlarmToggle implements CommandExecutor {
+    public String COMMAND_ID = "sa_toggle";
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
@@ -28,7 +30,7 @@ public class SculkAlarmToggle implements CommandExecutor {
         assert p != null;
         if (p.hasPermission("sculk_alarm.toggle")) {
             PersistentDataContainer pData = p.getPersistentDataContainer();
-            NamespacedKey dataKey = new NamespacedKey(SculkAlram.getPlugin(), "sa_toggle");
+            NamespacedKey dataKey = new NamespacedKey(SculkAlarm.getPlugin(), "sa_toggle");
             if (!(args.length == 0)) {
                 if      (args[0].equals("on")) { stateOn(p);}
                 else if (args[0].equals("off")) { stateOff(p); }
@@ -50,17 +52,16 @@ public class SculkAlarmToggle implements CommandExecutor {
 
     private void stateOn(Player p) {
         PersistentDataContainer pData = p.getPersistentDataContainer();
-        NamespacedKey dataKey = new NamespacedKey(SculkAlram.getPlugin(), "sa_toggle");
+        NamespacedKey dataKey = new NamespacedKey(SculkAlarm.getPlugin(), "sa_toggle");
         pData.set(dataKey, PersistentDataType.INTEGER, 1);
         p.sendMessage(Component.text("Sculk alarm gui is now shown", Style.style(TextColor.color(120, 255 , 120))));
     }
 
     private void stateOff(Player p) {
         PersistentDataContainer pData = p.getPersistentDataContainer();
-        NamespacedKey dataKey = new NamespacedKey(SculkAlram.getPlugin(), "sa_toggle");
+        NamespacedKey dataKey = new NamespacedKey(SculkAlarm.getPlugin(), "sa_toggle");
         pData.set(dataKey, PersistentDataType.INTEGER, 0);
         p.sendMessage(Component.text("Sculk alarm gui is now hidden", Style.style(TextColor.color(120, 255 , 120))));
         SidebarGenerator.clearSidebar(p);
     }
-
 }

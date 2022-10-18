@@ -1,6 +1,6 @@
 package com.gibbdev.server.commands;
 
-import com.gibbdev.SculkAlram;
+import com.gibbdev.SculkAlarm;
 import com.gibbdev.server.display.SidebarGenerator;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -16,6 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class SculkAlarmAppearance implements CommandExecutor {
+    public String COMMAND_ID = "sa_appearance";
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
@@ -28,7 +29,7 @@ public class SculkAlarmAppearance implements CommandExecutor {
         assert p != null;
         if (p.hasPermission("sculk_alarm.appearance")) {
             PersistentDataContainer pData = p.getPersistentDataContainer();
-            NamespacedKey dataKey = new NamespacedKey(SculkAlram.getPlugin(), "sa_appearance");
+            NamespacedKey dataKey = new NamespacedKey(SculkAlarm.getPlugin(), "sa_appearance");
             if (!(args.length == 0)) {
                 if (args[0].equals("chat") || args[0].equals("sidebar")) {
                     pData.set(dataKey, PersistentDataType.STRING, args[0]);

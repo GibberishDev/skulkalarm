@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.gibbdev</groupId>
-    <artifactId>sculkalram</artifactId>
-    <version>1.0</version>
+    <artifactId>sculkalaram</artifactId>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
-    <name>Sculk Alram</name>
+    <name>Sculk Alarm</name>
 
     <description>Small Plugin that allows players to see thier current sculk warning level</description>
     <properties>

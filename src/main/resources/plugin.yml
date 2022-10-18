@@ -1,6 +1,6 @@
-name: SculkAlram
+name: SculkAlarm
 version: '${project.version}'
-main: com.gibbdev.SculkAlram
+main: com.gibbdev.SculkAlarm
 api-version: 1.19
 authors: [ GibbDev ]
 description: Small Plugin that allows players to see thier current sculk warning level
@@ -9,4 +9,4 @@ commands:
   sa_appearance:
     description: Allows to toggle sculk alarm appearance
   sa_toggle:
-    description: Allows to toggle if alram gui appears on interact with recovery compass
+    description: Allows to toggle if alarm gui appears on interact with recovery compass
