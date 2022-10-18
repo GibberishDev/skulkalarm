@@ -31,9 +31,9 @@ Plugin features 2 commands:<br>
 /sa_appearance: allows player to choose which output on right-clicking recovery compass they want to see.<br>
     Usage: /sa_appearance chat|sidebar<br>
     Permission: sculk_alarm.appearance<br>
-
+<br>
 Big thanks to <a href="https://www.spigotmc.org/members/jowcey.87423/"><b>Jowcey</b></a> :D He is some sort of mentor in a whacky adventure of mine.<br>
 Would've never touched Java in my life if not him >.>
-<br><img src="warden.gif">
+<br><br><img src="warden.gif">
 
  
