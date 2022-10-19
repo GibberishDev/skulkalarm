@@ -1,4 +1,4 @@
-<h1> Sculk Alarm </h1>
+<h1> Sculk Alarm <img src="http://badge.henrya.org/spigotbukkit/downloads?spigot=105822&color=0a4650"></h1>
 <h2> Description </h2>
 
 Small lightweight plugin that allows players to see their alarm level given by triggering sculk shriekers.
