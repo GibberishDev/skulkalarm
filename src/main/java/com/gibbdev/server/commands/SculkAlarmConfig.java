@@ -43,7 +43,12 @@ public class SculkAlarmConfig implements CommandExecutor {
                 }
                 data.put(args[0], sb.toString().trim());
             }
-            sender.sendMessage(Text.color("&a" + args[0] + " &ais now set to: '" + args[1] + "'"));
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+                sb.append(args[i]).append(" ");
+            }
+            sender.sendMessage(Text.color("&e'" + args[0] + "' &ais now set to: '" + sb + "&r&a'"));
             this.plugin.getConfigLoader().getConfigData().fromMap(data);
             this.plugin.getConfigLoader().save();
         } else {

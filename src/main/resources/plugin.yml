@@ -4,6 +4,7 @@ main: com.gibbdev.SculkAlarm
 api-version: 1.19
 authors: [ GibbDev ]
 description: Small Plugin that allows players to see thier current sculk warning level
+depend: [ ExaltedCore ]
 website: https://github.com/GibberishDev/skulkalarm
 commands:
   sa_appearance:

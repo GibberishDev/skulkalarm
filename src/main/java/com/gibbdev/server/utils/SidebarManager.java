@@ -2,93 +2,120 @@ package com.gibbdev.server.utils;
 
 import com.gibbdev.SculkAlarm;
 import com.gibbdev.server.display.PlayerDataScraper;
+import com.jowcey.ExaltedCore.ExaltedCore;
+import com.jowcey.ExaltedCore.base.dependencies.commons.lang3.StringUtils;
+import com.jowcey.ExaltedCore.base.scheduler.RecurringTask;
 import com.jowcey.ExaltedCore.base.visual.Text;
+import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Level;
 
 public class SidebarManager {
-    static ScoreboardManager mngr = Bukkit.getScoreboardManager();
-    static Scoreboard playerBoard = mngr.getNewScoreboard();
-    static Objective playerObjective = playerBoard.registerNewObjective("", "");
+    private final SculkAlarm plugin;
 
-    static Scoreboard prevScoreboard;
-    static Boolean scoreboardEnabled = false;
+    private ScoreboardManager mngr;
 
-    private SculkAlarm plugin;
+    @Getter
+    private RecurringTask task;
+    @Getter
+    private final Map<UUID, Scoreboard> oldScoreBoards = new HashMap<>();
+    @Getter
+    private final Map<UUID, Scoreboard> enabledPlayers = new HashMap<>();
 
     public SidebarManager(SculkAlarm plugin) {
         this.plugin = plugin;
+        this.mngr = Bukkit.getScoreboardManager();
+        this.task = ExaltedCore.get().getScheduler().runTaskTimer(() -> {
+            for (UUID uuid : enabledPlayers.keySet()) {
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null) {
+                    updateAlarmSidebar(player);
+                }
+            }
+        }, 0L, 1L);
+        this.task.start();
+    }
+
+    private void initAlarmSidebar(@NotNull Player p) {
+        if (!this.enabledPlayers.containsKey(p.getUniqueId()))
+            return;
+        if (this.enabledPlayers.get(p.getUniqueId()) == null || this.enabledPlayers.get(p.getUniqueId()).getObjective(p.getUniqueId().toString()) == null) {
+            Scoreboard sb = mngr.getNewScoreboard();
+            Objective o = sb.registerNewObjective(p.getUniqueId().toString(), Criteria.DUMMY, Component.empty());
+            o.setDisplaySlot(DisplaySlot.SIDEBAR);
+            this.enabledPlayers.put(p.getUniqueId(), sb);
+        }
+        Scoreboard board = this.enabledPlayers.get(p.getUniqueId());
+        Objective objective = this.enabledPlayers.get(p.getUniqueId()).getObjective(p.getUniqueId().toString());
+        assert objective != null;
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        int lines = 10;
+        for (int i = 0; i < lines; i++) {
+            Team team = board.registerNewTeam("" + i);
+            team.addEntry(ChatColor.values()[i].toString());
+            objective.getScore(ChatColor.values()[i].toString()).setScore(lines - i - 1);
+        }
+
+        if (!p.getScoreboard().equals(this.enabledPlayers.get(p.getUniqueId()))) {
+            p.setScoreboard(this.enabledPlayers.get(p.getUniqueId()));
+        }
     }
 
     private void updateAlarmSidebar(@NotNull Player p) {
-        playerBoard = mngr.getNewScoreboard();
-        playerObjective.unregister();
-        playerObjective = playerBoard.registerNewObjective(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarLabel()), "dummy");
+        if (!this.enabledPlayers.containsKey(p.getUniqueId()))
+            return;
+        if (this.enabledPlayers.get(p.getUniqueId()) == null || this.enabledPlayers.get(p.getUniqueId()).getObjective(p.getUniqueId().toString()) == null) {
+            initAlarmSidebar(p);
+        }
+
         Integer warningLevel = PlayerDataScraper.getWarningLevel(p);
         Integer alarmSecondsLeft = PlayerDataScraper.getAlarmSecs(p);
-        playerObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        Score warningLevelDisplay =     playerObjective.getScore(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarLevelLabel()));
-        Score warningLevelDisplay1 =    playerObjective.getScore(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarLevelPrefix() + this.plugin.getConfigLoader().getConfigData().getSidebarLevelText(warningLevel)));
-        Score warningSecondsDisplay =   playerObjective.getScore(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarSecondsLabel()[0]));
-        Score warningSecondsDisplay1 =  playerObjective.getScore(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarSecondsLabel()[1]));
-        Score warningSecondsDisplay2 =  playerObjective.getScore(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarSecondsPrefix() + alarmSecondsLeft));
-        Score commentDisplay =          playerObjective.getScore(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarComment(warningLevel)[0]));
-        Score commentDisplay1 =         playerObjective.getScore(Text.color(this.plugin.getConfigLoader().getConfigData().getSidebarComment(warningLevel)[1]));
-        Score wardenDisplay =           playerObjective.getScore(Text.color(getWardenImageText(warningLevel, alarmSecondsLeft)));
+        setLine(p, 0, this.plugin.getConfigLoader().getConfigData().getSidebarLevelLabel());
+        setLine(p, 1, this.plugin.getConfigLoader().getConfigData().getSidebarLevelPrefix() + this.plugin.getConfigLoader().getConfigData().getSidebarLevelText(warningLevel));
+        setLine(p, 2, this.plugin.getConfigLoader().getConfigData().getSidebarSecondsLabel()[0]);
+        setLine(p, 3, this.plugin.getConfigLoader().getConfigData().getSidebarSecondsLabel()[1]);
+        setLine(p, 4, this.plugin.getConfigLoader().getConfigData().getSidebarSecondsPrefix() + alarmSecondsLeft);
+        setLine(p, 5, this.plugin.getConfigLoader().getConfigData().getSidebarComment(warningLevel)[0]);
+        setLine(p, 6, this.plugin.getConfigLoader().getConfigData().getSidebarComment(warningLevel)[1]);
+        setLine(p, 7, getWardenImageText(warningLevel, alarmSecondsLeft));
 
-        List<Score> dispList = new ArrayList<>();
-        if (!(this.plugin.getConfigLoader().getConfigData().getSidebarLevelLabel().equals(""))) {dispList.add(warningLevelDisplay);}
-        dispList.add(warningLevelDisplay1);
-        if (!(this.plugin.getConfigLoader().getConfigData().getSidebarSecondsLabel()[0].equals("")) && warningLevel > 0) {dispList.add(warningSecondsDisplay);}
-        if (!(this.plugin.getConfigLoader().getConfigData().getSidebarSecondsLabel()[1].equals("")) && warningLevel > 0) {dispList.add(warningSecondsDisplay1);}
-        if (warningLevel > 0) {dispList.add(warningSecondsDisplay2);}
-        if (!(this.plugin.getConfigLoader().getConfigData().getSidebarComment(warningLevel)[0].equals(""))) {dispList.add(commentDisplay);}
-        if (!(this.plugin.getConfigLoader().getConfigData().getSidebarComment(warningLevel)[1].equals(""))) {dispList.add(commentDisplay1);}
-        if (this.plugin.getConfigLoader().getConfigData().isSidebarImage()) {dispList.add(wardenDisplay);}
+    }
 
-        for (int i = 0; i < dispList.toArray().length; i++) {
-            dispList.get(i).setScore(10 - i);
-        }
-        dispList.clear();
-
-        p.setScoreboard(playerBoard);
+    private void setLine(@NotNull Player p, int i, String text) {
+        Scoreboard board = this.enabledPlayers.get(p.getUniqueId());
+        Team team = board.getTeam("" + i);
+        assert team != null;
+        String t = Text.MD5Color(text);
+        team.prefix(Component.text(t));
     }
 
     public void toggleSidebar(@NotNull Player p) {
-        Scoreboard currentScoreboard = p.getScoreboard();
-        if (currentScoreboard.equals(playerBoard)) {
-            p.setScoreboard(prevScoreboard);
-            scoreboardEnabled = false;
+        if (enabledPlayers.containsKey(p.getUniqueId())) {
+            this.clearSidebar(p);
         } else {
-            prevScoreboard = currentScoreboard;
-            p.setScoreboard(playerBoard);
-            scoreboardEnabled = true;
+            oldScoreBoards.put(p.getUniqueId(), p.getScoreboard());
+            enabledPlayers.put(p.getUniqueId(), null);
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (scoreboardEnabled) {
-                    updateAlarmSidebar(p);
-                } else {
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(SculkAlarm.getPlugin(),0L, 20L);
     }
 
     public void clearSidebar(@NotNull Player p) {
-        if (prevScoreboard == null) {
+        if (oldScoreBoards.get(p.getUniqueId()) == null) {
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        } else {p.setScoreboard(prevScoreboard);}
-        scoreboardEnabled = false;
+        } else {
+            p.setScoreboard(oldScoreBoards.get(p.getUniqueId()));
+        }
+        oldScoreBoards.remove(p.getUniqueId());
+        enabledPlayers.remove(p.getUniqueId());
     }
 
     private String getWardenImageText(Integer warningLevel, Integer secondsLeft) {
