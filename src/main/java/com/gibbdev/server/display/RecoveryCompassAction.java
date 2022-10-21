@@ -2,6 +2,7 @@ package com.gibbdev.server.display;
 
 import com.gibbdev.SculkAlarm;
 import org.bukkit.Material;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,11 +12,17 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class RecoveryCompassAction implements Listener {
+    private SculkAlarm plugin;
+
+    public RecoveryCompassAction(SculkAlarm plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        if (e.isCancelled()) {return;}
-        Player p = e.getPlayer();
+        //FIXME
 
+        Player p = e.getPlayer();
         if (p.getInventory().getItemInMainHand().getType().equals(Material.RECOVERY_COMPASS)
                 && p.hasPermission("sculk_alarm.toggle")
                 && e.getAction().isRightClick()
@@ -28,7 +35,7 @@ public class RecoveryCompassAction implements Listener {
                     ChatGenerator.sendAlarmChat(p);
                 }
                 else if (pData.get(SculkAlarm.dataAppearance, PersistentDataType.STRING).equals("chat")) { ChatGenerator.sendAlarmChat(p);}
-                else if (pData.get(SculkAlarm.dataAppearance, PersistentDataType.STRING).equals("sidebar")) { SidebarGenerator.toggleSidebar(p);}
+                else if (pData.get(SculkAlarm.dataAppearance, PersistentDataType.STRING).equals("sidebar")) { this.plugin.getSidebarManager().toggleSidebar(p);}
             }
         }
     }

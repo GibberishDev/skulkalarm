@@ -16,7 +16,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class SculkAlarmAppearance implements CommandExecutor {
-    public String COMMAND_ID = "sa_appearance";
+    private SculkAlarm plugin;
+
+    public SculkAlarmAppearance(SculkAlarm plugin) {
+        this.plugin = plugin;
+    }
+
+    public static String COMMAND_ID = "sa_appearance";
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
@@ -29,13 +35,12 @@ public class SculkAlarmAppearance implements CommandExecutor {
         assert p != null;
         if (p.hasPermission("sculk_alarm.appearance")) {
             PersistentDataContainer pData = p.getPersistentDataContainer();
-            NamespacedKey dataKey = new NamespacedKey(SculkAlarm.getPlugin(), "sa_appearance");
             if (!(args.length == 0)) {
                 if (args[0].equals("chat") || args[0].equals("sidebar")) {
-                    pData.set(dataKey, PersistentDataType.STRING, args[0]);
+                    pData.set(SculkAlarm.dataAppearance, PersistentDataType.STRING, args[0]);
                     p.sendMessage(Component.text("Sculk alarm gui now shows in " + args[0], Style.style(TextColor.color(120, 255 , 120))));
                     if (args[0].equals("chat")) {
-                        SidebarGenerator.clearSidebar(p);
+                        this.plugin.getSidebarManager().clearSidebar(p);
                     }
                 } else {
                     p.sendMessage(Component.text("Invalid syntax. usage: /sa_appearance chat|sidebar", Style.style(TextColor.color(255, 120, 120))));
