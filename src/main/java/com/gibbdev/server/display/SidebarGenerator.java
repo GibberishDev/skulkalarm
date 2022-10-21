@@ -2,10 +2,6 @@ package com.gibbdev.server.display;
 
 import com.gibbdev.SculkAlarm;
 import com.gibbdev.server.config.ConfigLoader;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,44 +23,32 @@ public class SidebarGenerator implements Listener {
     static Scoreboard prevScoreboard;
     static Boolean scoreboardEnabled = false;
 
-
-    static ChatColor txtColor = ChatColor.GREEN;
-    static ChatColor lvl0Color = ChatColor.DARK_GREEN;
-    static ChatColor lvl1Color = ChatColor.YELLOW;
-    static ChatColor lvl2Color = ChatColor.GOLD;
-    static ChatColor lvl3Color = ChatColor.DARK_RED;
-    static ChatColor lvl4Color = ChatColor.DARK_AQUA;
-
     private static void updateAlarmSidebar(@NotNull Player p) {
         playerBoard = mngr.getNewScoreboard();
         playerObjective.unregister();
-        playerObjective = playerBoard.registerNewObjective("alarmSidebar", "dummy", Component.text("Sculk Alarm", Style.style(TextDecoration.BOLD, TextColor.color(ConfigLoader.sidebarLabelColor.asRGB()))));
-        Integer warningLevel = PlayerDataScraper.getAlarmLevel(p);
-        Integer secsTillLevelDrop = PlayerDataScraper.getAlarmSecs(p);
+        playerObjective = playerBoard.registerNewObjective(ConfigLoader.getSidebarLabel(), "dummy");
+        Integer warningLevel = PlayerDataScraper.getWarningLevel(p);
+        Integer alarmSecondsLeft = PlayerDataScraper.getAlarmSecs(p);
         playerObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        String txtComment = getCommentMessage(warningLevel)[0];
-        String txtComment1 = getCommentMessage(warningLevel)[1];
-
-        Score warningLevelDisplay = playerObjective.getScore(txtColor +"Current alarm level:");
-        Score warningLevelDisplay1 = playerObjective.getScore(txtColor + " - "  + getColor(warningLevel) + warningLevel);
-        Score warningSinceTiksDisplay = playerObjective.getScore(txtColor + "Seconds until alarm");
-        Score warningSinceTiksDisplay1 = playerObjective.getScore(txtColor + "level decreases:");
-        Score warningSinceTiksDisplay2 = playerObjective.getScore(txtColor + " - " + ChatColor.GOLD + secsTillLevelDrop + "      ");
-        Score commentDisplay = playerObjective.getScore(txtComment);
-        Score commentDisplay1 = playerObjective.getScore(txtComment1);
-        Score wardenDisplay = playerObjective.getScore(getWardenImageText(warningLevel, secsTillLevelDrop));
+        Score warningLevelDisplay =     playerObjective.getScore(ConfigLoader.getSidebarLevelLabel());
+        Score warningLevelDisplay1 =    playerObjective.getScore(ConfigLoader.getSidebarLevelPrefix() + ConfigLoader.getSidebarLevelText(warningLevel));
+        Score warningSecondsDisplay =   playerObjective.getScore(ConfigLoader.getSidebarSecondsLabel()[0]);
+        Score warningSecondsDisplay1 =  playerObjective.getScore(ConfigLoader.getSidebarSecondsLabel()[1]);
+        Score warningSecondsDisplay2 =  playerObjective.getScore(ConfigLoader.getSidebarSecondsPrefix() + alarmSecondsLeft);
+        Score commentDisplay =          playerObjective.getScore(ConfigLoader.getSidebarComment(warningLevel)[0]);
+        Score commentDisplay1 =         playerObjective.getScore(ConfigLoader.getSidebarComment(warningLevel)[1]);
+        Score wardenDisplay =           playerObjective.getScore(getWardenImageText(warningLevel, alarmSecondsLeft));
 
         List<Score> dispList = new ArrayList<>();
-        if (ConfigLoader.textSidebarLevelLabel) {dispList.add(warningLevelDisplay);}
+        if (!(ConfigLoader.getSidebarLevelLabel().equals(""))) {dispList.add(warningLevelDisplay);}
         dispList.add(warningLevelDisplay1);
-        if (ConfigLoader.textSidebarSecondsLabel && warningLevel > 0) {dispList.add(warningSinceTiksDisplay); dispList.add(warningSinceTiksDisplay1);}
-        if (warningLevel > 0) {dispList.add(warningSinceTiksDisplay2);}
-        if (ConfigLoader.textSidebarCommentLabel) {
-            if (!(txtComment.equals(""))) {dispList.add(commentDisplay);}
-            if (!(txtComment1.equals(""))) {dispList.add(commentDisplay1);}
-        }
-        if (ConfigLoader.textSidebarImage) {dispList.add(wardenDisplay);}
+        if (!(ConfigLoader.getSidebarSecondsLabel()[0].equals("")) && warningLevel > 0) {dispList.add(warningSecondsDisplay);}
+        if (!(ConfigLoader.getSidebarSecondsLabel()[1].equals("")) && warningLevel > 0) {dispList.add(warningSecondsDisplay1);}
+        if (warningLevel > 0) {dispList.add(warningSecondsDisplay2);}
+        if (!(ConfigLoader.getSidebarComment(warningLevel)[0].equals(""))) {dispList.add(commentDisplay);}
+        if (!(ConfigLoader.getSidebarComment(warningLevel)[1].equals(""))) {dispList.add(commentDisplay1);}
+        if (ConfigLoader.getImageState()) {dispList.add(wardenDisplay);}
 
         for (int i = 0; i < dispList.toArray().length; i++) {
             dispList.get(i).setScore(10 - i);
@@ -118,48 +102,9 @@ public class SidebarGenerator implements Listener {
         return msg;
     }
 
-    private static String[] getCommentMessage(Integer warnLvl) {
-        String msg = "";
-        String msg1 = "";
-        switch (warnLvl) {
-            case 0: {
-                msg = ChatColor.ITALIC + (getColor(warnLvl) +"Well Done");
-                break;}
-            case 1: {
-                msg = ChatColor.ITALIC + (getColor(warnLvl) +"Well... you are safe.");
-                msg1 = ChatColor.ITALIC + (getColor(warnLvl) +"For now...");
-                break;}
-            case 2: {
-                msg = ChatColor.ITALIC + (getColor(warnLvl) +"You were supposed");
-                msg1 = ChatColor.ITALIC + (getColor(warnLvl) +"to be silent...");
-                break;}
-            case 3: {
-                msg = ChatColor.ITALIC + (getColor(warnLvl) +"I suggest you runnin'");
-                msg1 = ChatColor.ITALIC + (getColor(warnLvl) +"outa' there, boi");
-                break;}
-            case 4: {
-                msg = ChatColor.BOLD + (getColor(warnLvl) + "I CAN HEAR YOU...");
-                break;
-            }
-        }
-        return new String[] {msg, msg1};
-    }
-
-    private static ChatColor getColor(Integer warnLvl) {
-        switch (warnLvl) {
-            case 0: return lvl0Color;
-            case 1: return lvl1Color;
-            case 2: return lvl2Color;
-            case 3: return lvl3Color;
-            case 4: return lvl4Color;
-            default: return txtColor;
-        }
-    }
-
     @EventHandler
     public void onPlayerLogOff(PlayerQuitEvent e) {
         clearSidebar(e.getPlayer());
     }
-
 
 }

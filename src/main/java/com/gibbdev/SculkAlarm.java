@@ -28,7 +28,7 @@ public final class SculkAlarm extends JavaPlugin {
         dataAppearance =  new NamespacedKey(plugin, "sa_appearance");
 
         saveDefaultConfig();
-        ConfigLoader.loadConfig();
+        ConfigLoader.reloadConfig();
 
         Integer regEvtListeners     = registerEventListeners();
         Integer regCommands         = registerCommands();

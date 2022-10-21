@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PlayerDataScraper {
 
-    public static Integer getAlarmLevel(@NotNull Player p) {
+    public static Integer getWarningLevel(@NotNull Player p) {
         NBTEntity playerNBT = new NBTEntity(p.getPlayer());
         return playerNBT.getCompound("warden_spawn_tracker").getInteger("warning_level");
     }

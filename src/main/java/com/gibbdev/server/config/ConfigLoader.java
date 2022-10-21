@@ -1,60 +1,166 @@
 package com.gibbdev.server.config;
 
 import com.gibbdev.SculkAlarm;
-import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigLoader{
     static Plugin  plugin = SculkAlarm.getPlugin();
 
-    public static Color textColor = Color.fromRGB(120, 255, 120);
-    public static Color sidebarLabelColor = Color.fromRGB(250, 120, 0);
-    public static Color lvl0Color = Color.fromRGB(60, 255, 60);
-    public static Color lvl1Color = Color.fromRGB(220, 200, 0);
-    public static Color lvl2Color = Color.fromRGB(250, 120, 0);
-    public static Color lvl3Color = Color.fromRGB(255, 40, 0);
-    public static Color lvl4Color = Color.fromRGB(10, 70, 80);
+    public static String sidebarLabel = "";
+    public static String sidebarLevelLabel = "";
+    public static String sidebarLevelPrefix = "";
+    public static String sidebarLevel0 = "";
+    public static String sidebarLevel1 = "";
+    public static String sidebarLevel2 = "";
+    public static String sidebarLevel3 = "";
+    public static String sidebarLevel4 = "";
+    public static String sidebarSecondsLabelLine1 = "";
+    public static String sidebarSecondsLabelLine2 = "";
+    public static String sidebarSecondsPrefix = "";
+    public static String sidebarCommentLevel0Line1 = "";
+    public static String sidebarCommentLevel0Line2 = "";
+    public static String sidebarCommentLevel1Line1 = "";
+    public static String sidebarCommentLevel1Line2 = "";
+    public static String sidebarCommentLevel2Line1 = "";
+    public static String sidebarCommentLevel2Line2 = "";
+    public static String sidebarCommentLevel3Line1 = "";
+    public static String sidebarCommentLevel3Line2 = "";
+    public static String sidebarCommentLevel4Line1 = "";
+    public static String sidebarCommentLevel4Line2 = "";
+    public static boolean sidebarImage = true;
 
-    public static Boolean textSidebarLevelLabel = true;
-    public static Boolean textSidebarSecondsLabel = true;
-    public static Boolean textSidebarCommentLabel = true;
-    public static Boolean textSidebarImage = true;
-    public static Boolean textChatCommentLabel = true;
-
-    public static void loadConfig() {
+    public static String chatLevelLabel = "";
+    public static String chatLevel0 = "";
+    public static String chatLevel1 = "";
+    public static String chatLevel2 = "";
+    public static String chatLevel3 = "";
+    public static String chatLevel4 = "";
+    public static String chatSecondsLabel = "";
+    public static String chatCommentLevel0 = "";
+    public static String chatCommentLevel1 = "";
+    public static String chatCommentLevel2 = "";
+    public static String chatCommentLevel3 = "";
+    public static String chatCommentLevel4 = "";
+    
+    public static void reloadConfig() {
         Configuration config = plugin.getConfig();
-        textColor = Color.fromRGB((Integer) config.get("colors.text.r"),(Integer) config.get("colors.text.g") ,(Integer) config.get("colors.text.b"));
-        sidebarLabelColor = Color.fromRGB((Integer) config.get("colors.sidebar-label.r"),(Integer) config.get("colors.sidebar-label.g") ,(Integer) config.get("colors.sidebar-label.b"));
-        lvl0Color = Color.fromRGB((Integer) config.get("colors.warning-level-0.r"),(Integer) config.get("colors.warning-level-0.g") ,(Integer) config.get("colors.warning-level-0.b"));
-        lvl1Color = Color.fromRGB((Integer) config.get("colors.warning-level-1.r"),(Integer) config.get("colors.warning-level-1.g") ,(Integer) config.get("colors.warning-level-1.b"));
-        lvl2Color = Color.fromRGB((Integer) config.get("colors.warning-level-2.r"),(Integer) config.get("colors.warning-level-2.g") ,(Integer) config.get("colors.warning-level-2.b"));
-        lvl3Color = Color.fromRGB((Integer) config.get("colors.warning-level-3.r"),(Integer) config.get("colors.warning-level-3.g") ,(Integer) config.get("colors.warning-level-3.b"));
-        lvl4Color = Color.fromRGB((Integer) config.get("colors.warning-level-4.r"),(Integer) config.get("colors.warning-level-4.g") ,(Integer) config.get("colors.warning-level-4.b"));
+        sidebarLabel = (String) config.get("sidebar-label");
+        
+        sidebarLevelLabel = (String) config.get("sidebar-level-label");
 
-        textSidebarLevelLabel = config.get("texts.sidebar-level-label.enabled").equals(1);
-        textSidebarSecondsLabel = config.get("texts.sidebar-seconds-label.enabled").equals(1);
-        textSidebarCommentLabel = config.get("texts.sidebar-comment-label.enabled").equals(1);
-        textSidebarImage = config.get("texts.sidebar-warden-image.enabled").equals(1);
-        textChatCommentLabel = config.get("texts.chat-comment-label.enabled").equals(1);
+        sidebarLevelPrefix = (String) config.get("sidebar-level-prefix");
+        
+        sidebarLevel0 = (String) config.get("sidebar-level-0");
+        sidebarLevel1 = (String) config.get("sidebar-level-1");
+        sidebarLevel2 = (String) config.get("sidebar-level-2");
+        sidebarLevel3 = (String) config.get("sidebar-level-3");
+        sidebarLevel4 = (String) config.get("sidebar-level-4");
+        
+        sidebarSecondsLabelLine1 = (String) config.get("sidebar-seconds-label-line-1");
+        sidebarSecondsLabelLine2 = (String) config.get("sidebar-seconds-label-line-2");
+
+        sidebarSecondsPrefix = (String) config.get("sidebar-seconds-prefix");
+        
+        sidebarCommentLevel0Line1 = (String) config.get("sidebar-comment-level-0-line-1");
+        sidebarCommentLevel0Line2 = (String) config.get("sidebar-comment-level-0-line-2");
+        sidebarCommentLevel1Line1 = (String) config.get("sidebar-comment-level-1-line-1");
+        sidebarCommentLevel1Line2 = (String) config.get("sidebar-comment-level-1-line-2");
+        sidebarCommentLevel2Line1 = (String) config.get("sidebar-comment-level-2-line-1");
+        sidebarCommentLevel2Line2 = (String) config.get("sidebar-comment-level-2-line-2");
+        sidebarCommentLevel3Line1 = (String) config.get("sidebar-comment-level-3-line-1");
+        sidebarCommentLevel3Line2 = (String) config.get("sidebar-comment-level-3-line-2");
+        sidebarCommentLevel4Line1 = (String) config.get("sidebar-comment-level-4-line-1");
+        sidebarCommentLevel4Line2 = (String) config.get("sidebar-comment-level-4-line-2");
+
+        sidebarImage = config.get("sidebar-image").equals(1);
+        
+        chatLevelLabel = (String) config.get("chat-level-label");
+        
+        chatLevel0 = (String) config.get("chat-level-0");
+        chatLevel1 = (String) config.get("chat-level-1");
+        chatLevel2 = (String) config.get("chat-level-2");
+        chatLevel3 = (String) config.get("chat-level-3");
+        chatLevel4 = (String) config.get("chat-level-4");
+        
+        chatSecondsLabel = (String) config.get("chat-seconds-label");
+        
+        chatCommentLevel0 = (String) config.get("chat-comment-level-0-label");
+        chatCommentLevel1 = (String) config.get("chat-comment-level-1-label");
+        chatCommentLevel2 = (String) config.get("chat-comment-level-2-label");
+        chatCommentLevel3 = (String) config.get("chat-comment-level-3-label");
+        chatCommentLevel4 = (String) config.get("chat-comment-level-4-label");
     }
 
-    public static TextColor getColor(Integer lvl) {
+    public static String getSidebarLabel() {
+        return sidebarLabel;
+    }
+
+    public static String getSidebarLevelLabel() {
+        return sidebarLevelLabel;
+    }
+
+    public static String getSidebarLevelPrefix() {
+        return sidebarLevelPrefix;
+    }
+
+    public static String getSidebarLevelText(Integer lvl) {
         switch (lvl) {
-            case 0:
-                return TextColor.color(lvl0Color.asRGB());
-            case 1:
-                return TextColor.color(lvl1Color.asRGB());
-            case 2:
-                return TextColor.color(lvl2Color.asRGB());
-            case 3:
-                return TextColor.color(lvl3Color.asRGB());
-            case 4:
-                return TextColor.color(lvl4Color.asRGB());
-            default:
-                return TextColor.color(textColor.asRGB());
+            default: return sidebarLevel0;
+            case 1: return sidebarLevel1;
+            case 2: return sidebarLevel2;
+            case 3: return sidebarLevel3;
+            case 4: return sidebarLevel4;
         }
     }
 
+    public static String[] getSidebarSecondsLabel() {
+        return new String[] {sidebarSecondsLabelLine1, sidebarSecondsLabelLine2};
+    }
+
+    public static String getSidebarSecondsPrefix() {
+        return sidebarSecondsPrefix;
+    }
+
+    public static String[] getSidebarComment(Integer lvl) {
+        switch (lvl) {
+            default: return new String[] {sidebarCommentLevel0Line1, sidebarCommentLevel0Line2};
+            case 1: return new String[] {sidebarCommentLevel1Line1, sidebarCommentLevel1Line2};
+            case 2: return new String[] {sidebarCommentLevel2Line1, sidebarCommentLevel2Line2};
+            case 3: return new String[] {sidebarCommentLevel3Line1, sidebarCommentLevel3Line2};
+            case 4: return new String[] {sidebarCommentLevel4Line1, sidebarCommentLevel4Line2};
+        }
+    }
+
+    public static boolean getImageState() {
+        return sidebarImage;
+    }
+
+    public static String getChatLevelLabel() {
+        return chatLevelLabel;
+    }
+
+    public static String getChatLevelText(Integer lvl) {
+        switch (lvl) {
+            default: return chatLevel0;
+            case 1: return chatLevel1;
+            case 2: return chatLevel2;
+            case 3: return chatLevel3;
+            case 4: return chatLevel4;
+        }
+    }
+
+    public static String getChatSecondsLabel() {
+        return chatSecondsLabel;
+    }
+
+    public static String getChatComment(Integer lvl) {
+        switch (lvl) {
+            default: return chatCommentLevel0;
+            case 1: return chatCommentLevel1;
+            case 2: return chatCommentLevel2;
+            case 3: return chatCommentLevel3;
+            case 4: return chatCommentLevel4;
+        }
+    }
 }
