@@ -1,6 +1,6 @@
 package com.gibbdev.server.display;
 
-import de.tr7zw.nbtapi.NBTEntity;
+import com.jowcey.ExaltedCore.base.dependencies.nbt.NBTEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

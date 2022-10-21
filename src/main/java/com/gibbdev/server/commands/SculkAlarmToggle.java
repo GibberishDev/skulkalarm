@@ -16,7 +16,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class SculkAlarmToggle implements CommandExecutor {
-    public String COMMAND_ID = "sa_toggle";
+    private SculkAlarm plugin;
+
+    public SculkAlarmToggle(SculkAlarm plugin) {
+        this.plugin = plugin;
+    }
+
+    public static String COMMAND_ID = "sa_toggle";
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -30,14 +36,13 @@ public class SculkAlarmToggle implements CommandExecutor {
         assert p != null;
         if (p.hasPermission("sculk_alarm.toggle")) {
             PersistentDataContainer pData = p.getPersistentDataContainer();
-            NamespacedKey dataKey = new NamespacedKey(SculkAlarm.getPlugin(), "sa_toggle");
             if (!(args.length == 0)) {
                 if      (args[0].equals("on")) { stateOn(p);}
                 else if (args[0].equals("off")) { stateOff(p); }
                 else    {p.sendMessage(Component.text("Invalid syntax. usage: /sa_toggle on|off", Style.style(TextColor.color(255, 120, 120))));}
             } else {
-                if (pData.has(dataKey)) {
-                    switch (pData.get(dataKey, PersistentDataType.INTEGER)) {
+                if (pData.has(SculkAlarm.dataToggle)) {
+                    switch (pData.get(SculkAlarm.dataToggle, PersistentDataType.INTEGER)) {
                         case 0 : stateOn(p); break;
                         case 1: stateOff(p); break;
                     }
@@ -62,6 +67,6 @@ public class SculkAlarmToggle implements CommandExecutor {
         NamespacedKey dataKey = new NamespacedKey(SculkAlarm.getPlugin(), "sa_toggle");
         pData.set(dataKey, PersistentDataType.INTEGER, 0);
         p.sendMessage(Component.text("Sculk alarm gui is now hidden", Style.style(TextColor.color(120, 255 , 120))));
-        SidebarGenerator.clearSidebar(p);
+        this.plugin.getSidebarManager().clearSidebar(p);
     }
 }
